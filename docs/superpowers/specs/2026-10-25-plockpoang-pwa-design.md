@@ -17,6 +17,8 @@ bonus ceiling of **240 points per hour**.
   included**.
 - **240 p/h is the ceiling where maximum bonus is reached, not a pass/fail
   line.** Being below 240 is normal and must never be presented as failure.
+- Bonus tiers are believed to start around **205 p/h**, but the exact tier
+  boundaries and number of tiers are unknown.
 - Official stoppages (system malfunction, meetings, accidents) stop the clock,
   but must be filed with the team manager.
 - A picking session can last anywhere from under an hour to 8 hours; the user
@@ -58,6 +60,11 @@ bonus ceiling of **240 points per hour**.
   (*Maxbonus*). The fill uses one neutral accent colour below 240 and turns gold
   with a *Maxbonus* label at ≥ 240. No red / failure colours anywhere. Shows "—"
   during the first 5 minutes of active time.
+  - A **bonus zone** from 205 to 240 is shaded on the gauge with a tick at 205,
+    and a *Bonuszon* label appears while pts/h is in that range. No individual
+    tiers are shown until their boundaries are known.
+  - The thresholds live in one constants module (`BONUS_START = 205`,
+    `BONUS_MAX = 240`) so they — and later, real tiers — are a one-line change.
 - **Status line** (phrased as distance to max bonus, never as a deficit):
   - With a planned end time that has not passed:
     *"312 p kvar till maxbonus · 1 h 40 min (187 p/h)"* — points still needed to
@@ -164,6 +171,7 @@ interface StoredState {
 src/
   domain/
     types.ts        Session, Entry, Pause, StoredState
+    constants.ts    BONUS_START, BONUS_MAX, qualifying/threshold durations
     scoring.ts      points, active time, pts/h, delta, needed-by-end
     records.ts      records and streaks from a session list
     session.ts      pure operations: start, addStop, adjust, setTotal,
