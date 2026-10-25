@@ -15,6 +15,8 @@ bonus ceiling of **240 points per hour**.
   picked there. A stop is therefore worth at least 2 points.
 - Points per hour is calculated over the **whole picking shift, breaks
   included**.
+- **240 p/h is the ceiling where maximum bonus is reached, not a pass/fail
+  line.** Being below 240 is normal and must never be presented as failure.
 - Official stoppages (system malfunction, meetings, accidents) stop the clock,
   but must be filed with the team manager.
 - A picking session can last anywhere from under an hour to 8 hours; the user
@@ -36,7 +38,7 @@ bonus ceiling of **240 points per hour**.
 
 - Logging a common stop takes one tap.
 - At any moment the user can see their current pts/h and how far they are from
-  240-pace.
+  max-bonus pace (240 p/h).
 - Numbers remain correct if the app is closed, the screen locks or the phone
   restarts mid-session.
 - Installable from Chrome on Android and usable fully offline.
@@ -52,13 +54,17 @@ bonus ceiling of **240 points per hour**.
 
 ### Picking screen
 
-- **Pace meter:** large pts/h figure and a gauge against 240. Green at ≥ 240,
-  red below. Shows "—" during the first 5 minutes of active time.
-- **Status line:**
+- **Pace meter:** large pts/h figure and a gauge that fills toward 240
+  (*Maxbonus*). The fill uses one neutral accent colour below 240 and turns gold
+  with a *Maxbonus* label at ≥ 240. No red / failure colours anywhere. Shows "—"
+  during the first 5 minutes of active time.
+- **Status line** (phrased as distance to max bonus, never as a deficit):
   - With a planned end time that has not passed:
-    *"Behöver 312 p på 1 h 40 min (187 p/h)"* — points still needed to finish at
-    240 p/h, the remaining time, and the pace required for the remainder.
-  - Otherwise: *"+24 p över 240-takt"* / *"−18 p under 240-takt"*.
+    *"312 p kvar till maxbonus · 1 h 40 min (187 p/h)"* — points still needed to
+    finish at 240 p/h, the remaining time, and the pace required for the
+    remainder. When already reached: *"Maxbonus säkrad"*.
+  - Otherwise: *"18 p till maxbonus-takt"* when below, *"Maxbonus-takt, 24 p
+    marginal"* when at or above.
 - **Two large buttons:** **1 kolli (+2)** and **2 kolli (+3)**. Each logs one
   stop and gives a short vibration (`navigator.vibrate`).
 - **Annat** opens a keypad with two modes:
@@ -75,7 +81,8 @@ bonus ceiling of **240 points per hour**.
 - Final pts/h, total points, number of stops, total kolli, active time, and a
   list of pauses with reason, start and end (for reporting to the team manager).
 - Start and end times can be edited (in case the user forgot to start or stop).
-- Celebration if pts/h ≥ 240 or any record was broken by this session.
+- Celebration if pts/h ≥ 240 (*Maxbonus!*) or any record was broken by this
+  session. Otherwise a neutral summary — no "missed" messaging.
 
 ### Records screen
 
