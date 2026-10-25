@@ -18,6 +18,7 @@ export function StaleSessionDialog({ session, now, onEnd, onContinue }: Props) {
   const confirm = () => {
     const endedAt = end ? fromLocalInput(end) : NaN
     if (!(endedAt > session.startedAt)) return setError('Sluttiden måste vara efter starttiden')
+    if (endedAt > now) return setError('Sluttiden kan inte vara i framtiden')
     onEnd(endedAt)
   }
 

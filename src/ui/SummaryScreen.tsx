@@ -12,11 +12,13 @@ interface Props {
   state: StoredState
   id: string
   now: number
+  /** Show celebrations (only when arriving straight from ending the session). */
+  celebrate?: boolean
   update: Update
   onClose(): void
 }
 
-export function SummaryScreen({ state, id, now, update, onClose }: Props) {
+export function SummaryScreen({ state, id, now, celebrate: allowCelebrate = false, update, onClose }: Props) {
   const session = state.sessions.find((s): s is LiveSession => s.id === id && s.source === 'live')
   const [start, setStart] = useState(session ? toLocalInput(session.startedAt) : '')
   const [end, setEnd] = useState(session ? toLocalInput(session.endedAt ?? now) : '')
@@ -38,7 +40,7 @@ export function SummaryScreen({ state, id, now, update, onClose }: Props) {
   for (const name of recordsBroken(computeRecords(others, now), computeRecords(state.sessions, now))) {
     celebrations.push(`Nytt rekord: ${name}`)
   }
-  const celebrate = celebrations.length > 0
+  const celebrate = allowCelebrate && celebrations.length > 0
 
   useEffect(() => {
     if (celebrate) navigator.vibrate?.([60, 40, 60])
@@ -52,6 +54,7 @@ export function SummaryScreen({ state, id, now, update, onClose }: Props) {
     const from = fromLocalInput(start)
     const to = fromLocalInput(end)
     if (from >= to) return setError('Sluttiden måste vara efter starttiden')
+    if (to > now) return setError('Sluttiden kan inte vara i framtiden')
     setError(undefined)
     update((s) => upsertSession(s, editTimes(session, from, to)))
   }

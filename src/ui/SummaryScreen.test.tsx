@@ -24,7 +24,7 @@ const done = live({
 })
 
 test('shows session numbers, pauses and month change', () => {
-  render(<SummaryScreen state={state(done)} id="s" now={t(12)} update={vi.fn()} onClose={vi.fn()} />)
+  render(<SummaryScreen state={state(done)} id="s" now={t(12)} celebrate update={vi.fn()} onClose={vi.fn()} />)
   // before: 900 p / 4 h = 225; session: 960 p / 3.75 h = 256; after: 1860 p / 7.75 h = 240
   expect(screen.getByText('Månaden: 225 → 240 p/h')).toBeTruthy()
   expect(screen.getByText(/Systemfel 07:00–07:15/)).toBeTruthy()
@@ -50,4 +50,19 @@ test('delete after confirm', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Ta bort pass' }))
   expect(update.mock.calls[0][0](st).sessions.map((s: Session) => s.id)).toEqual(['prev'])
   expect(onClose).toHaveBeenCalled()
+})
+
+test('no celebration when opened from history', () => {
+  render(<SummaryScreen state={state(done)} id="s" now={t(12)} update={vi.fn()} onClose={vi.fn()} />)
+  expect(screen.queryByText('Maxbonus-pass!')).toBeNull()
+  expect(screen.getByText('Månaden: 225 → 240 p/h')).toBeTruthy()
+})
+
+test('rejects an end time in the future', () => {
+  const update = vi.fn()
+  render(<SummaryScreen state={state(done)} id="s" now={t(12)} update={update} onClose={vi.fn()} />)
+  fireEvent.input(screen.getByLabelText('Slut'), { target: { value: '2026-10-20T13:00' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Spara tider' }))
+  expect(screen.getByText('Sluttiden kan inte vara i framtiden')).toBeTruthy()
+  expect(update).not.toHaveBeenCalled()
 })

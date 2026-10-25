@@ -3,7 +3,7 @@ import type { StoredState } from '../domain/types'
 export type Screen =
   | { name: 'start' }
   | { name: 'pick' }
-  | { name: 'summary'; id: string }
+  | { name: 'summary'; id: string; celebrate?: boolean }
   | { name: 'manual'; id?: string }
   | { name: 'records' }
 

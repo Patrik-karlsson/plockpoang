@@ -49,3 +49,20 @@ test('save failure returns false', () => {
   }
   expect(saveState({ version: 1, sessions: [] }, st)).toBe(false)
 })
+
+test('blocked storage (getter throws) does not crash', () => {
+  const desc = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
+  Object.defineProperty(globalThis, 'localStorage', {
+    configurable: true,
+    get() {
+      throw new DOMException('blocked', 'SecurityError')
+    },
+  })
+  try {
+    expect(loadState()).toEqual({ version: 1, sessions: [] })
+    expect(saveState({ version: 1, sessions: [] })).toBe(false)
+  } finally {
+    if (desc) Object.defineProperty(globalThis, 'localStorage', desc)
+    else delete (globalThis as { localStorage?: Storage }).localStorage
+  }
+})

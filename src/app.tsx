@@ -42,7 +42,14 @@ export function App() {
     content = <PickScreen state={state} active={active} now={now} update={update} go={setScreen} />
   } else if (screen.name === 'summary') {
     content = (
-      <SummaryScreen state={state} id={screen.id} now={now} update={update} onClose={() => setScreen({ name: 'start' })} />
+      <SummaryScreen
+        state={state}
+        id={screen.id}
+        now={now}
+        celebrate={screen.celebrate}
+        update={update}
+        onClose={() => setScreen({ name: 'start' })}
+      />
     )
   } else if (screen.name === 'manual') {
     const id = screen.id
@@ -88,7 +95,7 @@ export function App() {
           onEnd={(endedAt) => {
             // editTimes clips any pause that started after the chosen end time.
             update((s) => upsertSession(s, editTimes(endSession(active, endedAt), active.startedAt, endedAt)))
-            setScreen({ name: 'summary', id: active.id })
+            setScreen({ name: 'summary', id: active.id, celebrate: true })
           }}
           onContinue={() => setStaleDismissed(true)}
         />

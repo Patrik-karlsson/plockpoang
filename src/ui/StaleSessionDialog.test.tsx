@@ -14,3 +14,12 @@ test('defaults to the last entry and ends there', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Avsluta vid denna tid' }))
   expect(onEnd).toHaveBeenCalledWith(t(14, 10))
 })
+
+test('rejects an end time in the future', () => {
+  const onEnd = vi.fn()
+  render(<StaleSessionDialog session={live({ startedAt: t(6) })} now={t(8, 0, 21)} onEnd={onEnd} onContinue={vi.fn()} />)
+  fireEvent.input(screen.getByLabelText('Sluttid'), { target: { value: '2026-10-21T09:00' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Avsluta vid denna tid' }))
+  expect(screen.getByText('Sluttiden kan inte vara i framtiden')).toBeTruthy()
+  expect(onEnd).not.toHaveBeenCalled()
+})

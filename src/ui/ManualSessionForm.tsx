@@ -12,6 +12,7 @@ interface Props {
 }
 
 const toNumber = (v: string) => (v.trim() === '' ? NaN : Number(v))
+const WHOLE = /^\d*$/
 
 export function ManualSessionForm({ initial, today, onSave, onDelete, onCancel }: Props) {
   const [date, setDate] = useState(initial?.date ?? today)
@@ -21,6 +22,11 @@ export function ManualSessionForm({ initial, today, onSave, onDelete, onCancel }
   const [error, setError] = useState<string>()
 
   const save = () => {
+    const h = hours.trim()
+    const m = minutes.trim()
+    if (!WHOLE.test(h) || !WHOLE.test(m) || Number(m) > 59) {
+      return setError('Ange timmar och minuter som heltal (minuter 0–59)')
+    }
     const activeMs = ((Number(hours) || 0) * 60 + (Number(minutes) || 0)) * MINUTE_MS
     const input = { date, activeMs, points: toNumber(points) }
     const message = validateManual(input, today)

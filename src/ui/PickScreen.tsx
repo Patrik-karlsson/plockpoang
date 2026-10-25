@@ -48,7 +48,7 @@ export function PickScreen({ state, active, now, update, go }: Props) {
   const finish = () => {
     if (!window.confirm('Avsluta passet?')) return
     change((s) => endSession(s, Date.now()))
-    go({ name: 'summary', id: active.id })
+    go({ name: 'summary', id: active.id, celebrate: true })
   }
 
   return (

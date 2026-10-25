@@ -17,8 +17,16 @@ function isStoredState(value: unknown): value is StoredState {
 }
 
 /** Loads saved state; unreadable data is kept under a backup key instead of being overwritten. */
-export function loadState(storage: Storage = localStorage, now = Date.now()): StoredState {
-  const raw = storage.getItem(STORAGE_KEY)
+export function loadState(storage?: Storage, now = Date.now()): StoredState {
+  let st: Storage
+  let raw: string | null
+  try {
+    // Reading `localStorage` itself throws when site data is blocked.
+    st = storage ?? localStorage
+    raw = st.getItem(STORAGE_KEY)
+  } catch {
+    return emptyState()
+  }
   if (raw === null) return emptyState()
   try {
     const parsed: unknown = JSON.parse(raw)
@@ -27,16 +35,17 @@ export function loadState(storage: Storage = localStorage, now = Date.now()): St
     // fall through to backup
   }
   try {
-    storage.setItem(BACKUP_PREFIX + now, raw)
+    st.setItem(BACKUP_PREFIX + now, raw)
   } catch {
     // nothing more we can do
   }
   return emptyState()
 }
 
-export function saveState(state: StoredState, storage: Storage = localStorage): boolean {
+export function saveState(state: StoredState, storage?: Storage): boolean {
   try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(state))
+    const st = storage ?? localStorage
+    st.setItem(STORAGE_KEY, JSON.stringify(state))
     return true
   } catch {
     return false
