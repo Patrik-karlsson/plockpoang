@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#111418"/>
+  <!-- gauge track -->
+  <path d="M96 336 A160 160 0 0 1 416 336" fill="none" stroke="#252c35" stroke-width="44" stroke-linecap="round"/>
+  <!-- progress -->
+  <path d="M96 336 A160 160 0 0 1 360 214" fill="none" stroke="#4fa3ff" stroke-width="44" stroke-linecap="round"/>
+  <!-- max bonus mark -->
+  <path d="M376 230 A160 160 0 0 1 416 336" fill="none" stroke="#f5c542" stroke-width="44" stroke-linecap="round"/>
+  <!-- package -->
+  <rect x="196" y="300" width="120" height="104" rx="14" fill="#f5c542"/>
+  <rect x="244" y="300" width="24" height="44" fill="#1c1500" opacity="0.35"/>
+</svg>
