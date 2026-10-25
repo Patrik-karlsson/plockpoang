@@ -81,7 +81,10 @@ h2 {
   font-size: 1rem;
   font-weight: 600;
   color: var(--muted);
-  text-transform: capitalize;
+}
+
+.card-title::first-letter {
+  text-transform: uppercase;
 }
 
 .month-pace {
@@ -434,4 +437,86 @@ h2 {
   text-align: center;
   font-weight: 600;
   background: var(--surface-2);
+}
+
+/* ---------- summary ---------- */
+
+.facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  margin: 12px 0 0;
+}
+
+.facts dt {
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.plain-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.celebration {
+  padding: 18px 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(110deg, var(--gold) 0%, #ffe08a 45%, var(--gold) 55%, var(--gold) 100%);
+  background-size: 250% 100%;
+  color: var(--gold-ink);
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  animation: pop 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both, shine 2.4s ease-in-out 0.5s 2;
+}
+
+.celebration p {
+  margin: 0;
+}
+
+.celebration p + p {
+  margin-top: 4px;
+  font-size: 1.05rem;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shine {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -150% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .celebration {
+    animation: none;
+  }
 }
