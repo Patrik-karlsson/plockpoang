@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { STALE_SESSION_MS } from './domain/constants'
-import { activeSession, editTimes, endSession, upsertSession } from './domain/session'
-import type { StoredState } from './domain/types'
+import { activeSession, deleteSession, editTimes, endSession, upsertSession } from './domain/session'
+import type { ManualSession, StoredState } from './domain/types'
 import { loadState, saveState } from './storage'
+import { todayKey } from './ui/format'
+import { ManualSessionForm } from './ui/ManualSessionForm'
 import type { Screen, Update } from './ui/nav'
 import { PickScreen } from './ui/PickScreen'
+import { RecordsScreen } from './ui/RecordsScreen'
 import { StaleSessionDialog } from './ui/StaleSessionDialog'
 import { StartScreen } from './ui/StartScreen'
 import { SummaryScreen } from './ui/SummaryScreen'
@@ -42,9 +45,34 @@ export function App() {
       <SummaryScreen state={state} id={screen.id} now={now} update={update} onClose={() => setScreen({ name: 'start' })} />
     )
   } else if (screen.name === 'manual') {
-    content = <p>Lägg till pass</p>
+    const id = screen.id
+    const initial = state.sessions.find((s): s is ManualSession => s.id === id && s.source === 'manual')
+    const back = () => setScreen(initial ? { name: 'records' } : { name: 'start' })
+    content = (
+      <ManualSessionForm
+        key={id ?? 'new'}
+        initial={initial}
+        today={todayKey(now)}
+        onSave={(m) => {
+          update((s) => upsertSession(s, m))
+          back()
+        }}
+        onDelete={() => {
+          update((s) => deleteSession(s, id!))
+          back()
+        }}
+        onCancel={back}
+      />
+    )
   } else if (screen.name === 'records') {
-    content = <p>Rekord</p>
+    content = (
+      <RecordsScreen
+        sessions={state.sessions}
+        now={now}
+        onOpen={(s) => setScreen(s.source === 'live' ? { name: 'summary', id: s.id } : { name: 'manual', id: s.id })}
+        onBack={() => setScreen({ name: 'start' })}
+      />
+    )
   } else {
     content = <StartScreen state={state} now={now} update={update} go={setScreen} />
   }
